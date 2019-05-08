@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Emico\AttributeLanding\Model\FilterHider\FilterHiderInterface" type="Emico\AttributeLandingTweakwise\Model\FilterHider\TweakwiseFilterHider"/>
+    <type name="Emico\AttributeLanding\Model\FilterApplier\AggregateFilterApplier">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="tweakwise" xsi:type="string">Emico\AttributeLandingTweakwise\Model\FilterApplier\TweakwiseFilterApplier</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Emico\AttributeLandingTweakwise\Model\FilterApplier\TweakwiseFilterApplier">
+        <arguments>
+            <argument name="navigationContext" xsi:type="object">Emico\Tweakwise\Model\Catalog\Layer\NavigationContext\Category</argument>
+        </arguments>
+    </type>
+
+    <type name="Emico\Tweakwise\Model\Catalog\Layer\Url">
+        <plugin name="AttributeLandingTweakwise" type="Emico\AttributeLandingTweakwise\Plugin\UrlPlugin" />
+    </type>
+</config>
