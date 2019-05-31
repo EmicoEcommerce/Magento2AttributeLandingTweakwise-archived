@@ -116,4 +116,15 @@ class PathSlugStrategyPlugin
         }
         return $pathSlugStrategy->buildFilterUrl($request, $filters);
     }
+
+    /**
+     * @param PathSlugStrategy $pathSlugStrategy
+     * @param array $result
+     * @return array
+     */
+    public function afterGetRewriteEntitiesToCheck(PathSlugStrategy $pathSlugStrategy, array $result)
+    {
+        $result[] = 'landingpage';
+        return $result;
+    }
 }
