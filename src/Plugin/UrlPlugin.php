@@ -95,7 +95,7 @@ class UrlPlugin
         }
 
         // Capture the filter part of the URL and rebuild the URL to from {landingPage}/{filters} to {category}/{filters}
-        if (preg_match('/' . $landingPage->getUrlPath() . '(.*)/', $removeUrl, $matches)) {
+        if (preg_match('|' . $landingPage->getUrlPath() . '(.*)|', $removeUrl, $matches)) {
             $category = $this->getLayer()->getCurrentCategory();
             $categoryUrl = $category->getUrl();
             $removeUrl = $categoryUrl . $matches[1];
