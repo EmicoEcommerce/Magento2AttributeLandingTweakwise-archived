@@ -23,8 +23,11 @@ class TweakwiseFilterHider implements FilterHiderInterface
      */
     public function shouldHideFilter(LandingPageInterface $landingPage, FilterInterface $filter, Item $filterItem = null): bool
     {
-        if (!$filter instanceof TweakwiseFilter || !$filterItem instanceof TweakwiseFilterItem)
-        {
+        if (!$filter instanceof TweakwiseFilter) {
+            return false;
+        }
+
+        if ($filterItem && !$filterItem instanceof TweakwiseFilterItem) {
             return false;
         }
 
