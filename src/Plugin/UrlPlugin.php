@@ -9,6 +9,7 @@ namespace Emico\AttributeLandingTweakwise\Plugin;
 
 use Closure;
 use Emico\AttributeLanding\Api\Data\LandingPageInterface;
+use Emico\AttributeLanding\Model\Filter;
 use Emico\AttributeLanding\Model\LandingPageContext;
 use Emico\AttributeLanding\Model\UrlFinder;
 use Emico\AttributeLandingTweakwise\Model\FilterManager;
@@ -61,12 +62,41 @@ class UrlPlugin
     {
         $layer = $this->getLayer();
         $filters = $this->filterManager->getAllActiveFilters();
+
         $filters[] = $filterItem;
+        $filters = array_map(
+            function (Item $item) {
+                return new Filter(
+                    $item->getFilter()->getUrlKey(),
+                    $item->getAttribute()->getTitle()
+                );
+            },
+            $filters
+        );
+
+        $attributeLandingFilters = $this->getLandingsPageFilters();
+        $filters = array_unique(
+            array_merge($filters, $attributeLandingFilters),
+            SORT_REGULAR
+        );
+
         if ($url = $this->urlFinder->findUrlByFilters($filters, $layer->getCurrentCategory()->getEntityId())) {
             return '/' . $url;
         }
 
         return $proceed($filterItem);
+    }
+
+    /**
+     * @return Filter[]
+     */
+    public function getLandingsPageFilters()
+    {
+        if (!$landingsPage = $this->landingPageContext->getLandingPage()) {
+            return [];
+        }
+
+        return $landingsPage->getFilters();
     }
 
     /**

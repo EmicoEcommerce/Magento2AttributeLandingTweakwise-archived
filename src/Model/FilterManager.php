@@ -7,6 +7,7 @@
 namespace Emico\AttributeLandingTweakwise\Model;
 
 use Emico\AttributeLanding\Api\Data\LandingPageInterface;
+use Emico\AttributeLanding\Model\Filter;
 use Emico\AttributeLanding\Model\FilterHider\FilterHiderInterface;
 use Emico\AttributeLanding\Model\LandingPageContext;
 use Emico\Tweakwise\Model\Catalog\Layer\Filter\Item;
