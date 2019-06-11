@@ -31,8 +31,7 @@ class TweakwiseFilterHider implements FilterHiderInterface
             return false;
         }
 
-        $facet = $filter->getFacet()->getFacetSettings()->getAttributename();
-
+        $facet = $filter->getUrlKey();
         foreach ($landingPage->getFilters() as $landingPageFilter) {
             if ($landingPageFilter->getFacet() === $facet) {
                 if ($filterItem !== null) {
