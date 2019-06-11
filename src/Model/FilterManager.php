@@ -11,6 +11,7 @@ use Emico\AttributeLanding\Model\Filter;
 use Emico\AttributeLanding\Model\FilterHider\FilterHiderInterface;
 use Emico\AttributeLanding\Model\LandingPageContext;
 use Emico\Tweakwise\Model\Catalog\Layer\Filter\Item;
+use Emico\Tweakwise\Model\Client\Type\FacetType\SettingsType;
 use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\Resolver;
 
@@ -85,11 +86,20 @@ class FilterManager
             return $this->activeFilters;
         }
 
-        $filters = $this->getLayer()->getState()->getFilters();
-        if (!\is_array($filters)) {
+        $filterItems = $this->getLayer()->getState()->getFilters();
+        if (!\is_array($filterItems)) {
             return [];
         }
-        $this->activeFilters = $filters;
+        // Do not consider category as active
+        $filterItems = \array_filter($filterItems, function (Item $filter) {
+            $source = $filter
+                ->getFilter()
+                ->getFacet()
+                ->getFacetSettings()
+                ->getSource();
+            return $source !== SettingsType::SOURCE_CATEGORY;
+        });
+        $this->activeFilters = $filterItems;
         return $this->activeFilters;
     }
 
