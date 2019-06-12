@@ -8,7 +8,7 @@ namespace Emico\AttributeLandingTweakwise\Plugin;
 
 
 use Closure;
-use Emico\AttributeLanding\Api\Data\LandingPageInterface;
+use Emico\AttributeLanding\Model\Config;
 use Emico\AttributeLanding\Model\Filter;
 use Emico\AttributeLanding\Model\LandingPageContext;
 use Emico\AttributeLanding\Model\UrlFinder;
@@ -34,10 +34,16 @@ class UrlPlugin
      * @var LandingPageContext
      */
     private $landingPageContext;
+
     /**
      * @var FilterManager
      */
     private $filterManager;
+
+    /**
+     * @var Config
+     */
+    private $config;
 
     /**
      * UrlPlugin constructor.
@@ -45,12 +51,18 @@ class UrlPlugin
      * @param UrlFinder $urlFinder
      * @param LandingPageContext $landingPageContext
      */
-    public function __construct(Resolver $layerResolver, UrlFinder $urlFinder, LandingPageContext $landingPageContext, FilterManager $filterManager)
+    public function __construct(
+        Resolver $layerResolver,
+        UrlFinder $urlFinder,
+        LandingPageContext $landingPageContext,
+        FilterManager $filterManager,
+        Config $config)
     {
         $this->layerResolver = $layerResolver;
         $this->urlFinder = $urlFinder;
         $this->landingPageContext = $landingPageContext;
         $this->filterManager = $filterManager;
+        $this->config = $config;
     }
 
     /**
@@ -61,6 +73,10 @@ class UrlPlugin
      */
     public function aroundGetSelectFilter(Url $subject, Closure $proceed, Item $filterItem)
     {
+        if (!$this->config->isCrossLinkEnabled()) {
+            return $proceed($filterItem);
+        }
+
         $layer = $this->getLayer();
         $filters = $this->filterManager->getAllActiveFilters();
 
