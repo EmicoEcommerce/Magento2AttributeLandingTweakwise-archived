@@ -37,10 +37,23 @@ class FilterHelperPlugin
      * @param callable $proceed
      * @return bool
      */
-    public function aroundShouldPageBeIndexable(FilterHelper $helper, callable $proceed)
+    public function aroundShouldPageBeIndexable(FilterHelper $helper, callable $proceed): bool
     {
-        if ($this->landingPageContext->isOnLandingPage() && \count($this->filterManager->getActiveFiltersExcludingLandingPageFilters()) === 0) {
+        if ($this->landingPageContext->isOnLandingPage() &&
+            \count($this->filterManager->getActiveFiltersExcludingLandingPageFilters()) === 0
+        ) {
             return true;
+        }
+        return $proceed();
+    }
+
+    /**
+     * @return Item[]
+     */
+    public function aroundGetActiveFilterItems(FilterHelper $helper, callable $proceed): array
+    {
+        if ($this->landingPageContext->isOnLandingPage()) {
+            return $this->filterManager->getActiveFiltersExcludingLandingPageFilters();
         }
         return $proceed();
     }
