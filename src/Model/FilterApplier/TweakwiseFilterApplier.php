@@ -40,6 +40,10 @@ class TweakwiseFilterApplier implements FilterApplierInterface
         foreach ($filters as $filter) {
             $navigationRequest->addAttributeFilter($filter->getFacet(), $filter->getValue());
         }
+        
+        if ($page->getTweakwiseFilterTemplate()) {
+            $navigationRequest->setTemplateId($page->getTweakwiseFilterTemplate());
+        }
     }
 
     /**
