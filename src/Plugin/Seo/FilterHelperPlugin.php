@@ -7,6 +7,7 @@
 namespace Emico\AttributeLandingTweakwise\Plugin\Seo;
 
 use Emico\AttributeLanding\Model\LandingPageContext;
+use Emico\AttributeLandingTweakwise\Model\FilterManager;
 use Emico\Tweakwise\Model\Seo\FilterHelper;
 
 class FilterHelperPlugin
@@ -15,14 +16,20 @@ class FilterHelperPlugin
      * @var LandingPageContext
      */
     private $landingPageContext;
+    /**
+     * @var FilterManager
+     */
+    private $filterManager;
 
     /**
      * FilterHelperPlugin constructor.
      * @param LandingPageContext $landingPageContext
+     * @param FilterManager $filterManager
      */
-    public function __construct(LandingPageContext $landingPageContext)
+    public function __construct(LandingPageContext $landingPageContext, FilterManager $filterManager)
     {
         $this->landingPageContext = $landingPageContext;
+        $this->filterManager = $filterManager;
     }
 
     /**
@@ -30,10 +37,23 @@ class FilterHelperPlugin
      * @param callable $proceed
      * @return bool
      */
-    public function aroundShouldPageBeIndexable(FilterHelper $helper, callable $proceed)
+    public function aroundShouldPageBeIndexable(FilterHelper $helper, callable $proceed): bool
+    {
+        if ($this->landingPageContext->isOnLandingPage() &&
+            \count($this->filterManager->getActiveFiltersExcludingLandingPageFilters()) === 0
+        ) {
+            return true;
+        }
+        return $proceed();
+    }
+
+    /**
+     * @return Item[]
+     */
+    public function aroundGetActiveFilterItems(FilterHelper $helper, callable $proceed): array
     {
         if ($this->landingPageContext->isOnLandingPage()) {
-            return true;
+            return $this->filterManager->getActiveFiltersExcludingLandingPageFilters();
         }
         return $proceed();
     }
