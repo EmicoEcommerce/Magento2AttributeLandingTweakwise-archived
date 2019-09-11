@@ -41,8 +41,12 @@ class TweakwiseFilterApplier implements FilterApplierInterface
             $navigationRequest->addAttributeFilter($filter->getFacet(), $filter->getValue());
         }
         
-        if ($page->getTweakwiseFilterTemplate()) {
-            $navigationRequest->setTemplateId($page->getTweakwiseFilterTemplate());
+        if ($filterTemplateId = $page->getTweakwiseFilterTemplate()) {
+            $navigationRequest->setTemplateId($filterTemplateId);
+        }
+
+        if ($sortTemplateId = $page->getTweakwiseSortTemplate()) {
+            $navigationRequest->setSortTemplateId($sortTemplateId);
         }
     }
 
