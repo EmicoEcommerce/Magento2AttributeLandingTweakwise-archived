@@ -25,7 +25,7 @@ class FilterManager
     /**
      * @var array
      */
-    private $activeFiltersExludingLandingPageFilters;
+    private $activeFiltersExcludingLandingPageFilters;
 
     /**
      * @var Resolver
@@ -59,7 +59,7 @@ class FilterManager
      */
     public function getActiveFiltersExcludingLandingPageFilters(): array
     {
-        if ($this->activeFiltersExludingLandingPageFilters === null) {
+        if ($this->activeFiltersExcludingLandingPageFilters === null) {
             $filters = $this->getAllActiveFilters();
             $landingPage = $this->landingPageContext->getLandingPage();
             if ($landingPage === null) {
@@ -72,9 +72,9 @@ class FilterManager
                     unset($filters[$index]);
                 }
             }
-            $this->activeFiltersExludingLandingPageFilters = $filters;
+            $this->activeFiltersExcludingLandingPageFilters = $filters;
         }
-        return $this->activeFiltersExludingLandingPageFilters;
+        return $this->activeFiltersExcludingLandingPageFilters;
     }
 
     /**
