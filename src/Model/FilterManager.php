@@ -20,32 +20,33 @@ class FilterManager
     /**
      * @var array
      */
-    private $activeFilters;
+    protected $activeFilters;
 
     /**
      * @var array
      */
-    private $activeFiltersExcludingLandingPageFilters;
+    protected $activeFiltersExcludingLandingPageFilters;
 
     /**
      * @var Resolver
      */
-    private $layerResolver;
+    protected $layerResolver;
 
     /**
      * @var FilterHiderInterface
      */
-    private $filterHider;
+    protected $filterHider;
 
     /**
      * @var LandingPageContext
      */
-    private $landingPageContext;
+    protected $landingPageContext;
 
     /**
      * FilterManager constructor.
      * @param Resolver $layerResolver
      * @param FilterHiderInterface $filterHider
+     * @param LandingPageContext $landingPageContext
      */
     public function __construct(Resolver $layerResolver, FilterHiderInterface $filterHider, LandingPageContext $landingPageContext)
     {
@@ -55,7 +56,7 @@ class FilterManager
     }
 
     /**
-     * @return array
+     * @return Item[]
      */
     public function getActiveFiltersExcludingLandingPageFilters(): array
     {
@@ -65,7 +66,7 @@ class FilterManager
             if ($landingPage === null) {
                 return $filters;
             }
-
+            /** @var string|int $index  */
             foreach ($filters as $index => $filterItem) {
                 /** @var Item $filterItem */
                 if ($this->filterHider->shouldHideFilter($landingPage, $filterItem->getFilter(), $filterItem)) {

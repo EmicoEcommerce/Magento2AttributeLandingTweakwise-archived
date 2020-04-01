@@ -14,6 +14,21 @@
         </arguments>
     </type>
 
+    <virtualType name="Emico\AttributeLandingTweakwise\Model\NavigationConfig\LandingPage" type="Emico\Tweakwise\Model\NavigationConfig">
+        <arguments>
+            <argument name="filterFormInputProvider" xsi:type="object">Emico\AttributeLandingTweakwise\Model\FilterFormInputProvider\LandingPageInputProvider</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- If you need other layouts or possible even layer objects register them here -->
+    <type name="Emico\Tweakwise\Controller\Ajax\Navigation">
+        <arguments>
+            <argument name="initializerMap" xsi:type="array">
+                <item name="landingpage" xsi:type="object">Emico\AttributeLandingTweakwise\Model\AjaxResultInitializer\LandingPageInitializer</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Emico\Tweakwise\Model\Catalog\Layer\Url">
         <plugin name="AttributeLandingTweakwise" type="Emico\AttributeLandingTweakwise\Plugin\UrlPlugin" />
     </type>
