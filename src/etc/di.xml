@@ -29,6 +29,14 @@
         </arguments>
     </type>
 
+    <type name="Emico\Tweakwise\Model\Catalog\Layer\Url\Strategy\PathSlugStrategy">
+        <arguments>
+            <argument name="rewriteEntities" xsi:type="array">
+                <item name="landingpage" xsi:type="string">landingpage</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Emico\Tweakwise\Model\Catalog\Layer\Url">
         <plugin name="AttributeLandingTweakwise" type="Emico\AttributeLandingTweakwise\Plugin\UrlPlugin" />
     </type>
