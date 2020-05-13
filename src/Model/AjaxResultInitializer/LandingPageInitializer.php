@@ -14,6 +14,7 @@ use Emico\Tweakwise\Model\AjaxResultInitializer\InitializerInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Registry;
@@ -114,11 +115,20 @@ class LandingPageInitializer implements InitializerInterface
      */
     private function initializePage(RequestInterface $request)
     {
-        $pageId = (int)$request->getParam('__tw_object_id') ?: 2;
-        $landingPage = $this->landingPageRepository->getById($pageId);
+        $pageId = (int)$request->getParam('__tw_object_id');
+        if (!$pageId) {
+            throw new NotFoundException(__('Page not found'));
+        }
 
-        if (!$landingPage->isActive()) {
-            throw new NotFoundException(__('Page not active'));
+        try {
+            $landingPage = $this->landingPageRepository->getById($pageId);
+            if (!$landingPage->isActive()) {
+                throw new NotFoundException(__('Page not active'));
+            }
+        } catch (NoSuchEntityException $e) {
+            throw new NotFoundException(__('Page not found'));
+        } catch (LocalizedException $e) {
+            throw new NotFoundException(__('Page not found'));
         }
 
         // Register the category, its needed while rendering filters and products
