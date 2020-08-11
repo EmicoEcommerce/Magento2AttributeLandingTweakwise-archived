@@ -6,10 +6,12 @@
 
 namespace Emico\AttributeLandingTweakwise\Model;
 
+use Emico\AttributeLanding\Api\Data\FilterInterface;
 use Emico\AttributeLanding\Api\Data\LandingPageInterface;
 use Emico\AttributeLanding\Model\Filter;
 use Emico\AttributeLanding\Model\FilterHider\FilterHiderInterface;
 use Emico\AttributeLanding\Model\LandingPageContext;
+use Emico\AttributeLanding\Model\UrlFinder;
 use Emico\Tweakwise\Model\Catalog\Layer\Filter\Item;
 use Emico\Tweakwise\Model\Client\Type\FacetType\SettingsType;
 use Magento\Catalog\Model\Layer;
@@ -43,16 +45,70 @@ class FilterManager
     protected $landingPageContext;
 
     /**
+     * @var UrlFinder
+     */
+    protected $urlFinder;
+
+    /**
      * FilterManager constructor.
      * @param Resolver $layerResolver
      * @param FilterHiderInterface $filterHider
      * @param LandingPageContext $landingPageContext
+     * @param UrlFinder $urlFinder
      */
-    public function __construct(Resolver $layerResolver, FilterHiderInterface $filterHider, LandingPageContext $landingPageContext)
-    {
+    public function __construct(
+        Resolver $layerResolver,
+        FilterHiderInterface $filterHider,
+        LandingPageContext $landingPageContext,
+        UrlFinder $urlFinder
+    ) {
         $this->layerResolver = $layerResolver;
         $this->filterHider = $filterHider;
         $this->landingPageContext = $landingPageContext;
+        $this->urlFinder = $urlFinder;
+    }
+
+    /**
+     * @param Item $filterItem
+     * @return string|null
+     */
+    public function findLandingPageUrlForFilterItem(Item $filterItem)
+    {
+        $layer = $this->getLayer();
+
+        $filters = array_map(
+            static function (Item $item) {
+                return new Filter(
+                    $item->getFilter()->getUrlKey(),
+                    $item->getAttribute()->getTitle()
+                );
+            },
+            array_merge($this->getAllActiveFilters(), [$filterItem])
+        );
+
+        $attributeLandingFilters = $this->getLandingsPageFilters();
+        $filters = array_unique(
+            array_merge($filters, $attributeLandingFilters),
+            SORT_REGULAR
+        );
+
+        if ($url = $this->urlFinder->findUrlByFilters($filters, $layer->getCurrentCategory()->getEntityId())) {
+            return $url;
+        }
+
+        return null;
+    }
+
+    /**
+     * @return FilterInterface[]
+     */
+    public function getLandingsPageFilters()
+    {
+        if (!$landingsPage = $this->landingPageContext->getLandingPage()) {
+            return [];
+        }
+
+        return $landingsPage->getFilters();
     }
 
     /**

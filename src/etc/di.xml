@@ -48,4 +48,14 @@
     <type name="Emico\Tweakwise\Model\Seo\FilterHelper">
         <plugin name="AttributeLandingTweakwise" type="Emico\AttributeLandingTweakwise\Plugin\Seo\FilterHelperPlugin" />
     </type>
+
+    <type name="Emico\Tweakwise\Block\LayeredNavigation\RenderLayered\DefaultRenderer">
+        <plugin name="AttributeLandingTweakwiseNoAjax"
+                type="Emico\AttributeLandingTweakwise\Plugin\Block\LayeredNavigation\RenderLayered\RendererPlugin"/>
+    </type>
+
+    <type name="Emico\Tweakwise\Block\LayeredNavigation\RenderLayered\SwatchRenderer">
+        <plugin name="AttributeLandingTweakwiseNoAjax"
+                type="Emico\AttributeLandingTweakwise\Plugin\Block\LayeredNavigation\RenderLayered\RendererPlugin"/>
+    </type>
 </config>

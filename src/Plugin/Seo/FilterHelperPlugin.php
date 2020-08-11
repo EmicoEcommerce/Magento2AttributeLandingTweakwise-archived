@@ -8,7 +8,9 @@ namespace Emico\AttributeLandingTweakwise\Plugin\Seo;
 
 use Emico\AttributeLanding\Model\LandingPageContext;
 use Emico\AttributeLandingTweakwise\Model\FilterManager;
+use Emico\Tweakwise\Model\Catalog\Layer\Filter\Item;
 use Emico\Tweakwise\Model\Seo\FilterHelper;
+use Emico\AttributeLanding\Model\UrlFinder;
 
 class FilterHelperPlugin
 {
@@ -16,6 +18,7 @@ class FilterHelperPlugin
      * @var LandingPageContext
      */
     private $landingPageContext;
+
     /**
      * @var FilterManager
      */
@@ -26,8 +29,10 @@ class FilterHelperPlugin
      * @param LandingPageContext $landingPageContext
      * @param FilterManager $filterManager
      */
-    public function __construct(LandingPageContext $landingPageContext, FilterManager $filterManager)
-    {
+    public function __construct(
+        LandingPageContext $landingPageContext,
+        FilterManager $filterManager
+    ) {
         $this->landingPageContext = $landingPageContext;
         $this->filterManager = $filterManager;
     }
@@ -48,6 +53,8 @@ class FilterHelperPlugin
     }
 
     /**
+     * @param FilterHelper $helper
+     * @param callable $proceed
      * @return Item[]
      */
     public function aroundGetActiveFilterItems(FilterHelper $helper, callable $proceed): array
@@ -56,5 +63,16 @@ class FilterHelperPlugin
             return $this->filterManager->getActiveFiltersExcludingLandingPageFilters();
         }
         return $proceed();
+    }
+
+    /**
+     * @param FilterHelper $helper
+     * @param bool $result
+     * @param Item $item
+     * @return bool|string|null
+     */
+    public function afterShouldFilterBeIndexable(FilterHelper $helper, bool $result, Item $item)
+    {
+        return $result || $this->filterManager->findLandingPageUrlForFilterItem($item);
     }
 }
