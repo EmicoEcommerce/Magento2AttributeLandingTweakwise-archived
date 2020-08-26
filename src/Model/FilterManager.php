@@ -65,10 +65,16 @@ class FilterManager
             if ($landingPage === null) {
                 return $filters;
             }
-
+            /**
+             * @var int|string $index
+             * @var Item $filterItem
+             */
             foreach ($filters as $index => $filterItem) {
-                /** @var Item $filterItem */
-                if ($this->filterHider->shouldHideFilter($landingPage, $filterItem->getFilter(), $filterItem)) {
+                if ($this->filterHider->shouldHideFilter(
+                    $landingPage,
+                    $filterItem->getFilter(),
+                    $filterItem
+                )) {
                     unset($filters[$index]);
                 }
             }
