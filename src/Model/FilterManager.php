@@ -124,8 +124,11 @@ class FilterManager
             }
             /** @var string|int $index  */
             foreach ($filters as $index => $filterItem) {
-                /** @var Item $filterItem */
-                if ($this->filterHider->shouldHideFilter($landingPage, $filterItem->getFilter(), $filterItem)) {
+                if ($this->filterHider->shouldHideFilter(
+                    $landingPage,
+                    $filterItem->getFilter(),
+                    $filterItem
+                )) {
                     unset($filters[$index]);
                 }
             }

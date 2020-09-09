@@ -17,12 +17,12 @@ class FilterHelperPlugin
     /**
      * @var LandingPageContext
      */
-    private $landingPageContext;
+    protected $landingPageContext;
 
     /**
      * @var FilterManager
      */
-    private $filterManager;
+    protected $filterManager;
 
     /**
      * FilterHelperPlugin constructor.
