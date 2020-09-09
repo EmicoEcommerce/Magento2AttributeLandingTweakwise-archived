@@ -8,6 +8,7 @@ namespace Emico\AttributeLandingTweakwise\Plugin\Seo;
 
 use Emico\AttributeLanding\Model\LandingPageContext;
 use Emico\AttributeLandingTweakwise\Model\FilterManager;
+use Emico\Tweakwise\Model\Catalog\Layer\Filter\Item;
 use Emico\Tweakwise\Model\Seo\FilterHelper;
 
 class FilterHelperPlugin
@@ -15,11 +16,12 @@ class FilterHelperPlugin
     /**
      * @var LandingPageContext
      */
-    private $landingPageContext;
+    protected $landingPageContext;
+
     /**
      * @var FilterManager
      */
-    private $filterManager;
+    protected $filterManager;
 
     /**
      * FilterHelperPlugin constructor.

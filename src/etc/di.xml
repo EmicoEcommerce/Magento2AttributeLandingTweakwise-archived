@@ -25,4 +25,13 @@
     <type name="Emico\Tweakwise\Model\Seo\FilterHelper">
         <plugin name="AttributeLandingTweakwise" type="Emico\AttributeLandingTweakwise\Plugin\Seo\FilterHelperPlugin" />
     </type>
+
+    <type name="Emico\Tweakwise\Model\Catalog\Layer\Url\Strategy\PathSlugStrategy">
+        <arguments>
+            <argument name="rewriteResolvers" xsi:type="array">
+                <item name="category" xsi:type="object">Emico\AttributeLandingTweakwise\Model\Catalog\Layer\Url\RewriteResolver\LandingPageResolver</item>
+            </argument>
+        </arguments>
+    </type>
+
 </config>
