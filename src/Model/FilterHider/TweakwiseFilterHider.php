@@ -6,12 +6,13 @@
 
 namespace Emico\AttributeLandingTweakwise\Model\FilterHider;
 
+use Emico\AttributeLanding\Api\Data\FilterInterface as LandingPageFilterInterface;
 use Emico\AttributeLanding\Api\Data\LandingPageInterface;
 use Emico\AttributeLanding\Model\FilterHider\FilterHiderInterface;
-use Magento\Catalog\Model\Layer\Filter\Item;
+use Emico\Tweakwise\Model\Catalog\Layer\Filter as TweakwiseFilter;
 use Emico\Tweakwise\Model\Catalog\Layer\Filter\Item as TweakwiseFilterItem;
 use Magento\Catalog\Model\Layer\Filter\FilterInterface;
-use Emico\Tweakwise\Model\Catalog\Layer\Filter as TweakwiseFilter;
+use Magento\Catalog\Model\Layer\Filter\Item;
 
 class TweakwiseFilterHider implements FilterHiderInterface
 {
@@ -21,7 +22,11 @@ class TweakwiseFilterHider implements FilterHiderInterface
      * @param Item|null $filterItem
      * @return bool
      */
-    public function shouldHideFilter(LandingPageInterface $landingPage, FilterInterface $filter, Item $filterItem = null): bool
+    public function shouldHideFilter(
+        LandingPageInterface $landingPage,
+        FilterInterface $filter,
+        Item $filterItem = null
+    ): bool
     {
         if (!$filter instanceof TweakwiseFilter) {
             return false;
@@ -32,15 +37,32 @@ class TweakwiseFilterHider implements FilterHiderInterface
         }
 
         $facet = $filter->getUrlKey();
-        foreach ($landingPage->getFilters() as $landingPageFilter) {
-            if ($landingPageFilter->getFacet() === $facet) {
-                if ($filterItem !== null) {
-                    return strtolower($landingPageFilter->getValue()) === strtolower($filterItem->getAttribute()->getTitle());
+        $landingPageFilters = $landingPage->getFilters();
 
-                }
-                return true;
-            }
+        $landingPageFacets = array_map(
+            static function (LandingPageFilterInterface $landingPageFilter) {
+                return $landingPageFilter->getFacet();
+            },
+            $landingPageFilters
+        );
+
+        $isLandingPageFilter = in_array($facet, $landingPageFacets, true);
+        if (!$filterItem) {
+            return $isLandingPageFilter;
         }
-        return false;
+
+        $landingsPageFilterValues = array_map(
+            static function (LandingPageFilterInterface $landingPageFilter) {
+                return strtolower($landingPageFilter->getValue());
+            },
+            $landingPageFilters
+        );
+
+        return $isLandingPageFilter
+            && in_array(
+                strtolower($filterItem->getAttribute()->getTitle()),
+                $landingsPageFilterValues,
+                true
+            );
     }
 }
