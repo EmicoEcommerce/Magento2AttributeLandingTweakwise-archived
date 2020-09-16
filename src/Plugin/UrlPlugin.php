@@ -6,7 +6,6 @@
 
 namespace Emico\AttributeLandingTweakwise\Plugin;
 
-
 use Closure;
 use Emico\AttributeLanding\Api\Data\FilterInterface;
 use Emico\AttributeLanding\Model\Config;
