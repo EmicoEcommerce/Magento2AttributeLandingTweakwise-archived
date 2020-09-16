@@ -6,7 +6,6 @@
 
 namespace Emico\AttributeLandingTweakwise\Model\FilterApplier;
 
-
 use Emico\AttributeLanding\Api\Data\LandingPageInterface;
 use Emico\AttributeLanding\Model\FilterApplier\FilterApplierInterface;
 use Emico\Tweakwise\Model\Catalog\Layer\NavigationContext;
@@ -40,7 +39,7 @@ class TweakwiseFilterApplier implements FilterApplierInterface
         foreach ($filters as $filter) {
             $navigationRequest->addAttributeFilter($filter->getFacet(), $filter->getValue());
         }
-        
+
         if ($filterTemplateId = $page->getTweakwiseFilterTemplate()) {
             $navigationRequest->setTemplateId($filterTemplateId);
         }

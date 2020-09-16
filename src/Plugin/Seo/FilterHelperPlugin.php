@@ -10,7 +10,6 @@ use Emico\AttributeLanding\Model\LandingPageContext;
 use Emico\AttributeLandingTweakwise\Model\FilterManager;
 use Emico\Tweakwise\Model\Catalog\Layer\Filter\Item;
 use Emico\Tweakwise\Model\Seo\FilterHelper;
-use Emico\AttributeLanding\Model\UrlFinder;
 
 class FilterHelperPlugin
 {
