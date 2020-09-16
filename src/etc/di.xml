@@ -63,13 +63,5 @@
         <plugin name="AttributeLandingTweakwiseNoAjax"
                 type="Emico\AttributeLandingTweakwise\Plugin\Block\LayeredNavigation\RenderLayered\RendererPlugin"/>
     </type>
-
-    <type name="Emico\Tweakwise\Model\Catalog\Layer\Url\Strategy\PathSlugStrategy">
-        <arguments>
-            <argument name="rewriteResolvers" xsi:type="array">
-                <item name="landingpage" xsi:type="object">Emico\AttributeLandingTweakwise\Model\Catalog\Layer\Url\RewriteResolver\LandingPageResolver</item>
-            </argument>
-        </arguments>
-    </type>
-
+    
 </config>
