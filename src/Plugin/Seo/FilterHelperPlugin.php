@@ -28,8 +28,10 @@ class FilterHelperPlugin
      * @param LandingPageContext $landingPageContext
      * @param FilterManager $filterManager
      */
-    public function __construct(LandingPageContext $landingPageContext, FilterManager $filterManager)
-    {
+    public function __construct(
+        LandingPageContext $landingPageContext,
+        FilterManager $filterManager
+    ) {
         $this->landingPageContext = $landingPageContext;
         $this->filterManager = $filterManager;
     }
@@ -50,6 +52,8 @@ class FilterHelperPlugin
     }
 
     /**
+     * @param FilterHelper $helper
+     * @param callable $proceed
      * @return Item[]
      */
     public function aroundGetActiveFilterItems(FilterHelper $helper, callable $proceed): array
@@ -58,5 +62,16 @@ class FilterHelperPlugin
             return $this->filterManager->getActiveFiltersExcludingLandingPageFilters();
         }
         return $proceed();
+    }
+
+    /**
+     * @param FilterHelper $helper
+     * @param bool $result
+     * @param Item $item
+     * @return bool|string|null
+     */
+    public function afterShouldFilterBeIndexable(FilterHelper $helper, bool $result, Item $item)
+    {
+        return $result || $this->filterManager->findLandingPageUrlForFilterItem($item);
     }
 }

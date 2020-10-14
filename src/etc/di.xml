@@ -14,6 +14,29 @@
         </arguments>
     </type>
 
+    <virtualType name="Emico\AttributeLandingTweakwise\Model\NavigationConfig\LandingPage" type="Emico\Tweakwise\Model\NavigationConfig">
+        <arguments>
+            <argument name="filterFormInputProvider" xsi:type="object">Emico\AttributeLandingTweakwise\Model\FilterFormInputProvider\LandingPageInputProvider</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- If you need other layouts or possible even layer objects register them here -->
+    <type name="Emico\Tweakwise\Controller\Ajax\Navigation">
+        <arguments>
+            <argument name="initializerMap" xsi:type="array">
+                <item name="landingpage" xsi:type="object">Emico\AttributeLandingTweakwise\Model\AjaxResultInitializer\LandingPageInitializer</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Emico\Tweakwise\Model\Catalog\Layer\Url\Strategy\PathSlugStrategy">
+        <arguments>
+            <argument name="rewriteEntities" xsi:type="array">
+                <item name="landingpage" xsi:type="string">landingpage</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Emico\Tweakwise\Model\Catalog\Layer\Url">
         <plugin name="AttributeLandingTweakwise" type="Emico\AttributeLandingTweakwise\Plugin\UrlPlugin" />
     </type>
@@ -31,4 +54,14 @@
         <plugin name="AttributeLandingTweakwise" type="Emico\AttributeLandingTweakwise\Plugin\Seo\FilterHelperPlugin" />
     </type>
 
+    <type name="Emico\Tweakwise\Block\LayeredNavigation\RenderLayered\DefaultRenderer">
+        <plugin name="AttributeLandingTweakwiseNoAjax"
+                type="Emico\AttributeLandingTweakwise\Plugin\Block\LayeredNavigation\RenderLayered\RendererPlugin"/>
+    </type>
+
+    <type name="Emico\Tweakwise\Block\LayeredNavigation\RenderLayered\SwatchRenderer">
+        <plugin name="AttributeLandingTweakwiseNoAjax"
+                type="Emico\AttributeLandingTweakwise\Plugin\Block\LayeredNavigation\RenderLayered\RendererPlugin"/>
+    </type>
+    
 </config>

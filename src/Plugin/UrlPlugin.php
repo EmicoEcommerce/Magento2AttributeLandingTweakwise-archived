@@ -6,8 +6,8 @@
 
 namespace Emico\AttributeLandingTweakwise\Plugin;
 
-
 use Closure;
+use Emico\AttributeLanding\Api\Data\FilterInterface;
 use Emico\AttributeLanding\Model\Config;
 use Emico\AttributeLanding\Model\Filter;
 use Emico\AttributeLanding\Model\LandingPageContext;
@@ -24,11 +24,6 @@ class UrlPlugin
      * @var Resolver
      */
     private $layerResolver;
-
-    /**
-     * @var UrlFinder
-     */
-    private $urlFinder;
 
     /**
      * @var LandingPageContext
@@ -48,18 +43,17 @@ class UrlPlugin
     /**
      * UrlPlugin constructor.
      * @param Resolver $layerResolver
-     * @param UrlFinder $urlFinder
      * @param LandingPageContext $landingPageContext
+     * @param FilterManager $filterManager
+     * @param Config $config
      */
     public function __construct(
         Resolver $layerResolver,
-        UrlFinder $urlFinder,
         LandingPageContext $landingPageContext,
         FilterManager $filterManager,
-        Config $config)
-    {
+        Config $config
+    ) {
         $this->layerResolver = $layerResolver;
-        $this->urlFinder = $urlFinder;
         $this->landingPageContext = $landingPageContext;
         $this->filterManager = $filterManager;
         $this->config = $config;
@@ -77,27 +71,7 @@ class UrlPlugin
             return $proceed($filterItem);
         }
 
-        $layer = $this->getLayer();
-        $filters = $this->filterManager->getAllActiveFilters();
-
-        $filters[] = $filterItem;
-        $filters = array_map(
-            function (Item $item) {
-                return new Filter(
-                    $item->getFilter()->getUrlKey(),
-                    $item->getAttribute()->getTitle()
-                );
-            },
-            $filters
-        );
-
-        $attributeLandingFilters = $this->getLandingsPageFilters();
-        $filters = array_unique(
-            array_merge($filters, $attributeLandingFilters),
-            SORT_REGULAR
-        );
-
-        if ($url = $this->urlFinder->findUrlByFilters($filters, $layer->getCurrentCategory()->getEntityId())) {
+        if ($url = $this->filterManager->findLandingPageUrlForFilterItem($filterItem)) {
             return '/' . $url;
         }
 
@@ -105,23 +79,11 @@ class UrlPlugin
     }
 
     /**
-     * @return Filter[]
-     */
-    public function getLandingsPageFilters()
-    {
-        if (!$landingsPage = $this->landingPageContext->getLandingPage()) {
-            return [];
-        }
-
-        return $landingsPage->getFilters();
-    }
-
-    /**
      * @param Url $subject
      * @param Closure $proceed
      * @param Item $filterItem
      * @return mixed|string
-     * 
+     *
      * When "hide_selected_filters" is disabled we need to apply some extra logic for the removal of filters.
      * If the user removes a filter which is part of the landingPage predefined filters we need to go to the category page instead of the landingpage
      */

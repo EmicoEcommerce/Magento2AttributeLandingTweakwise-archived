@@ -6,13 +6,13 @@
 
 namespace Emico\AttributeLandingTweakwise\Plugin;
 
-
 use Closure;
 use Emico\AttributeLanding\Model\LandingPageContext;
 use Emico\AttributeLandingTweakwise\Model\FilterManager;
 use Emico\Tweakwise\Model\Catalog\Layer\Filter\Item;
 use Emico\Tweakwise\Model\Catalog\Layer\Url\Strategy\PathSlugStrategy;
 use Emico\Tweakwise\Model\Catalog\Layer\UrlFactory;
+use Magento\Framework\App\Request\Http as MagentoHttpRequest;
 use Zend\Http\Request as HttpRequest;
 
 class PathSlugStrategyPlugin
@@ -35,9 +35,13 @@ class PathSlugStrategyPlugin
     /**
      * @param LandingPageContext $landingPageContext
      * @param FilterManager $filterManager
+     * @param UrlFactory $urlFactory
      */
-    public function __construct(LandingPageContext $landingPageContext, FilterManager $filterManager, UrlFactory $urlFactory)
-    {
+    public function __construct(
+        LandingPageContext $landingPageContext,
+        FilterManager $filterManager,
+        UrlFactory $urlFactory
+    ) {
         $this->landingPageContext = $landingPageContext;
         $this->filterManager = $filterManager;
         $this->urlFactory = $urlFactory;
@@ -46,12 +50,16 @@ class PathSlugStrategyPlugin
     /**
      * @param PathSlugStrategy $pathSlugStrategy
      * @param Closure $proceed
-     * @param HttpRequest $request
+     * @param MagentoHttpRequest $request
      * @param Item $item
      * @return string
      */
-    public function aroundGetAttributeSelectUrl(PathSlugStrategy $pathSlugStrategy, Closure $proceed, HttpRequest $request, Item $item)
-    {
+    public function aroundGetAttributeSelectUrl(
+        PathSlugStrategy $pathSlugStrategy,
+        Closure $proceed,
+        MagentoHttpRequest $request,
+        Item $item
+    ) {
         $landingPage = $this->landingPageContext->getLandingPage();
         if ($landingPage === null || $landingPage->getHideSelectedFilters()) {
             return $proceed($request, $item);
@@ -65,12 +73,16 @@ class PathSlugStrategyPlugin
     /**
      * @param PathSlugStrategy $pathSlugStrategy
      * @param Closure $proceed
-     * @param HttpRequest $request
+     * @param MagentoHttpRequest $request
      * @param Item $item
      * @return string
      */
-    public function aroundGetSliderUrl(PathSlugStrategy $pathSlugStrategy, Closure $proceed, HttpRequest $request, Item $item)
-    {
+    public function aroundGetSliderUrl(
+        PathSlugStrategy $pathSlugStrategy,
+        Closure $proceed,
+        MagentoHttpRequest $request,
+        Item $item
+    ) {
         $landingPage = $this->landingPageContext->getLandingPage();
         if ($landingPage === null || $landingPage->getHideSelectedFilters()) {
             return $proceed($request, $item);
@@ -93,12 +105,16 @@ class PathSlugStrategyPlugin
     /**
      * @param PathSlugStrategy $pathSlugStrategy
      * @param Closure $proceed
-     * @param HttpRequest $request
+     * @param MagentoHttpRequest $request
      * @param Item $item
      * @return string
      */
-    public function aroundGetAttributeRemoveUrl(PathSlugStrategy $pathSlugStrategy, Closure $proceed, HttpRequest $request, Item $item)
-    {
+    public function aroundGetAttributeRemoveUrl(
+        PathSlugStrategy $pathSlugStrategy,
+        Closure $proceed,
+        MagentoHttpRequest $request,
+        Item $item
+    ) {
         $landingPage = $this->landingPageContext->getLandingPage();
         if ($landingPage === null || $landingPage->getHideSelectedFilters()) {
             return $proceed($request, $item);
