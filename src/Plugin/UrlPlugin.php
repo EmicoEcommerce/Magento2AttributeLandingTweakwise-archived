@@ -14,7 +14,9 @@ use Emico\AttributeLanding\Model\LandingPageContext;
 use Emico\AttributeLanding\Model\UrlFinder;
 use Emico\AttributeLandingTweakwise\Model\FilterManager;
 use Emico\Tweakwise\Model\Catalog\Layer\Filter\Item;
+use Emico\Tweakwise\Model\Catalog\Layer\NavigationContext\CurrentContext;
 use Emico\Tweakwise\Model\Catalog\Layer\Url;
+use Emico\Tweakwise\Model\Client\Request\ProductSearchRequest;
 use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\Resolver;
 
@@ -39,6 +41,10 @@ class UrlPlugin
      * @var Config
      */
     private $config;
+    /**
+     * @var CurrentContext
+     */
+    private $context;
 
     /**
      * UrlPlugin constructor.
@@ -46,17 +52,20 @@ class UrlPlugin
      * @param LandingPageContext $landingPageContext
      * @param FilterManager $filterManager
      * @param Config $config
+     * @param CurrentContext $context
      */
     public function __construct(
         Resolver $layerResolver,
         LandingPageContext $landingPageContext,
         FilterManager $filterManager,
-        Config $config
+        Config $config,
+        CurrentContext $context
     ) {
         $this->layerResolver = $layerResolver;
         $this->landingPageContext = $landingPageContext;
         $this->filterManager = $filterManager;
         $this->config = $config;
+        $this->context = $context;
     }
 
     /**
@@ -67,7 +76,7 @@ class UrlPlugin
      */
     public function aroundGetSelectFilter(Url $subject, Closure $proceed, Item $filterItem)
     {
-        if (!$this->config->isCrossLinkEnabled()) {
+        if (!$this->config->isCrossLinkEnabled() || $this->context->getRequest() instanceof ProductSearchRequest) {
             return $proceed($filterItem);
         }
 
