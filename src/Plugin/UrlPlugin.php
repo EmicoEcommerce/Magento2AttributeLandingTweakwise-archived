@@ -7,11 +7,8 @@
 namespace Emico\AttributeLandingTweakwise\Plugin;
 
 use Closure;
-use Emico\AttributeLanding\Api\Data\FilterInterface;
 use Emico\AttributeLanding\Model\Config;
-use Emico\AttributeLanding\Model\Filter;
 use Emico\AttributeLanding\Model\LandingPageContext;
-use Emico\AttributeLanding\Model\UrlFinder;
 use Emico\AttributeLandingTweakwise\Model\FilterManager;
 use Emico\Tweakwise\Model\Catalog\Layer\Filter\Item;
 use Emico\Tweakwise\Model\Catalog\Layer\NavigationContext\CurrentContext;
@@ -41,6 +38,7 @@ class UrlPlugin
      * @var Config
      */
     private $config;
+
     /**
      * @var CurrentContext
      */
