@@ -13,7 +13,6 @@ use Emico\Tweakwise\Model\Catalog\Layer\Filter\Item;
 use Emico\Tweakwise\Model\Catalog\Layer\Url\Strategy\PathSlugStrategy;
 use Emico\Tweakwise\Model\Catalog\Layer\UrlFactory;
 use Magento\Framework\App\Request\Http as MagentoHttpRequest;
-use Zend\Http\Request as HttpRequest;
 
 class PathSlugStrategyPlugin
 {
@@ -36,6 +35,7 @@ class PathSlugStrategyPlugin
      * @param LandingPageContext $landingPageContext
      * @param FilterManager $filterManager
      * @param UrlFactory $urlFactory
+     * @param Url $magentoUrl
      */
     public function __construct(
         LandingPageContext $landingPageContext,
@@ -131,5 +131,44 @@ class PathSlugStrategyPlugin
             }
         }
         return $pathSlugStrategy->buildFilterUrl($request, $filters);
+    }
+
+    /**
+     * Adds landingpage filters to category select url
+     *
+     * @param PathSlugStrategy $original
+     * @param string $result
+     * @return string
+     */
+    public function afterGetCategoryFilterSelectUrl(
+        PathSlugStrategy $original,
+        string $result
+    ): string {
+        $landingPage = $this->landingPageContext->getLandingPage();
+        if ($landingPage === null) {
+            return $result;
+        }
+
+        // If $landingPage->getHideSelectedFilters() === false then the landingpage filters are already in the url
+        if (!$landingPage->getHideSelectedFilters()) {
+            return $result;
+        }
+
+        $landingsPageFilters = $this->filterManager->getLandingsPageFilters();
+        if (empty($landingsPageFilters)) {
+            return $result;
+        }
+
+        $filters = [];
+        foreach ($landingsPageFilters as $filter) {
+            $filters[] = $filter->getFacet();
+            $filters[] = strtolower($filter->getValue());
+        }
+
+        return sprintf(
+            '%s/%s',
+            rtrim($result, '/'),
+            ltrim(implode('/', $filters), '/')
+        );
     }
 }
