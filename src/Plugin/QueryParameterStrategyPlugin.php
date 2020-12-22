@@ -70,8 +70,9 @@ class QueryParameterStrategyPlugin
         }
 
         $query = [];
+        $queryPart = $urlParts['query'] ?? '';
         // Parse the current query parameters as string
-        parse_str($urlParts['query'], $query);
+        parse_str($queryPart, $query);
 
         foreach ($landingsPageFilters as $filter) {
             $query[$filter->getFacet()][] = strtolower($filter->getValue());
