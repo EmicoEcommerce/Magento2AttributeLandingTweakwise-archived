@@ -26,4 +26,4 @@ php bin/magento setup:upgrade
 ## A note on navigation.
 It is possible to have your users navigate to a landingpage when the user happens to select a set of filters which matches a landingpage.
 In order to do this one has to enable "emico_attributelanding/general/allow_crosslink".
-It is also important to note that in order to achieve this the filter values configured in the landinpage match the tweakwise filter values (as known in the navigator) exactly, this is case sensitive!
+It is also important to note that in order to achieve this the filter values configured in the landingpage match the tweakwise filter values (as known in the navigator) exactly, this is case sensitive!
