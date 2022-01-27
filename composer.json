@@ -4,7 +4,7 @@
     "require": {
         "php": "^7.1",
         "emico/tweakwise": "^3.0",
-        "emico/m2-attributelanding": "^2.0"
+        "emico/m2-attributelanding": "^1.1|^2.0"
     },
     "type": "magento2-module",
     "autoload": {
