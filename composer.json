@@ -2,9 +2,9 @@
     "name": "emico/m2-attributelanding-tweakwise",
     "description": "Provides compatibility between Attribute landing module and Tweakwise module.",
     "require": {
-        "php": "^7.1",
+        "php": ">=7.1 <8.2",
         "emico/tweakwise": "^3.0|^4.0",
-        "emico/m2-attributelanding": "^1.1|^2.0"
+        "emico/m2-attributelanding": "^1.1|^2.0|^3.0"
     },
     "type": "magento2-module",
     "autoload": {
