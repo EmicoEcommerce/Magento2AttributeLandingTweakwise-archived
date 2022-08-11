@@ -208,8 +208,10 @@ class PathSlugStrategyPlugin
                 $query['product_list_mode'] = $mode;
             }
 
+            $magentoUrl = $original->getMagentoUrl();
+
             return filter_var(
-                $original->magentoUrl->getDirectUrl($twOriginalUrl, ['_query' => $query]),
+                $magentoUrl->getDirectUrl($twOriginalUrl, ['_query' => $query]),
                 FILTER_SANITIZE_URL
             );
         }
