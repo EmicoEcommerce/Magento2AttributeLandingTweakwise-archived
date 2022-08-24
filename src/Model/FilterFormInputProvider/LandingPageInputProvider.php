@@ -28,9 +28,9 @@ class LandingPageInputProvider implements FilterFormInputProviderInterface
     protected $landingPageContext;
 
     /**
-     * @var RequestInterface
+     * @var RequestInterface $request
      */
-    protected $request;
+    protected RequestInterface $request;
 
     /**
      * LandingPageProvider constructor.
