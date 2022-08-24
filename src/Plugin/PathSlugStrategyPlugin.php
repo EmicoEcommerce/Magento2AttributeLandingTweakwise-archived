@@ -171,4 +171,51 @@ class PathSlugStrategyPlugin
             ltrim(implode('/', $filters), '/')
         );
     }
+
+    /**
+     * @param MagentoHttpRequest $request
+     * @return string
+     */
+    public function afterGetOriginalUrl(PathSlugStrategy $original, string $result, MagentoHttpRequest $request): string
+    {
+        $landingPage = $this->landingPageContext->getLandingPage();
+        if ($landingPage === null) {
+            return $result;
+        }
+
+        if ($twOriginalUrl = $request->getParam('__tw_original_url')) {
+            // This seems ugly, perhaps there is another way?
+            $query = [];
+            // Add page and sort
+            $page = $request->getParam('p');
+            $sort = $request->getParam('product_list_order');
+            $limit = $request->getParam('product_list_limit');
+            $mode = $request->getParam('product_list_mode');
+
+            if ($page &&
+                (int) $page > 1
+            ) {
+                $query['p'] = $page;
+            }
+
+            if ($sort) {
+                $query['product_list_order'] = $sort;
+            }
+            if ($limit) {
+                $query['product_list_limit'] = $limit;
+            }
+            if ($mode) {
+                $query['product_list_mode'] = $mode;
+            }
+
+            $magentoUrl = $original->getMagentoUrl();
+
+            return filter_var(
+                $magentoUrl->getDirectUrl($twOriginalUrl, ['_query' => $query]),
+                FILTER_SANITIZE_URL
+            );
+        }
+
+        return $result;
+    }
 }

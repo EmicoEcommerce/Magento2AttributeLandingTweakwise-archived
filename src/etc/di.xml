@@ -33,6 +33,10 @@
         <plugin name="AttributeLandingTweakwise" type="Emico\AttributeLandingTweakwise\Plugin\UrlPlugin" />
     </type>
 
+    <type name="Emico\Tweakwise\Model\AjaxNavigationResult">
+        <plugin name="AttributeLandingTweakwise" type="Emico\AttributeLandingTweakwise\Plugin\Model\AjaxNavigationResultPlugin" />
+    </type>
+
     <type name="Emico\Tweakwise\Model\Catalog\Layer\Url\Strategy\PathSlugStrategy">
         <plugin name="AttributeLandingTweakwise" type="Emico\AttributeLandingTweakwise\Plugin\PathSlugStrategyPlugin" />
         <arguments>
